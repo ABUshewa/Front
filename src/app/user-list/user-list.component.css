@@ -1,0 +1,7 @@
+table a{
+    justify-content: flex-start;
+    text-align: center;
+    flex: auto;
+    position: right;
+    align-content: right;
+}

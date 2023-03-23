@@ -1,0 +1,214 @@
+<div class="container-fluid" >
+  
+    <h2 class="text-center">Employee List</h2>
+      <div class="border">
+        <button (click)="open(content)" class="btn btn-md btn-outline-primary">
+          <i class="fa fa-user"></i> <i class="fa fa-plus"></i>New Employee</button>
+      </div> 
+   
+    
+    <!--<button class="btn btn-success mb-2" >Add New  <i class="fa fa-plus"></i></button>-->
+    <table class="table table-hover table-bordered table-striped">
+        <thead>
+          <tr>
+            <th scope="col">ID#</th>
+            <th scope="col">UserId</th>
+            <th scope="col">Shop Works On</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of employees">
+            <td><span>{{employee.id}}</span></td>         
+            <td><span>{{employee.userId}}</span></td>
+            <td><span>{{employee.shop}}</span></td>
+            <td><span>{{employee.salary}}</span></td>
+            <td>
+              <button class="btn btn-sm btn-info" (click)="openDetails(contentDetails,employee)">
+                <i class="fa fa-search"></i>View</button>
+              <button class="btn btn-sm btn-warning" (click)="openEdit(contentEdit, employee)">
+                <i class="fa fa-edit"></i>Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="openDelete(contentDelete, employee)">
+                <i class="fa fa-remove"></i>Delete</button>
+            </td>
+          
+          </tr>
+        </tbody>
+      </table>
+</div>
+
+<!--modal for add-->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Employee Form</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form  #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div class="form-group">
+        <label for="userId">User Id</label>
+        <div class="input-group">
+          <select  [class.is-invalid]="userId.invalid && userId.touched" class="form-control" name="userId"  #userId="ngModel" ngModel required="">
+            <option [defaultSelected] value="">Please Select user </option>
+            <option *ngFor="let user of users">{{user.id}}</option>
+          </select>
+        
+          </div>
+          <small class="text-danger" [class.d-none]="userId.valid || userId.untouched">UserId is Requered</small>
+      </div>
+      <hr>
+      <div class="form-group">
+        <label for="shop">Employee  Works On Shop:</label>
+        <div class="input-group">
+          <select [class.is-invalid]="shop.invalid && shop.touched" class="form-control" name="shop"  #shop="ngModel" ngModel required="">
+            <option [defaultSelected] value="">Please Select shop Works on</option>
+            <option *ngFor="let shop of shops">{{shop.name}}</option>
+          </select> 
+          
+        </div>
+        <small class="text-danger" [class.d-none]="shop.valid || shop.untouched">Shop Name  is Requered</small>
+        
+      </div>
+      <hr>
+      <div class="form-group">
+        <label for="salary">Employee Salary</label>
+        <div class="input-group">
+          <input  [class.is-invalid]="salary.invalid && salary.touched" id="salary" placeholder="Enter Salary Of Employee" type="number" min="100" #salary="ngModel"  name="salary" class="form-control"  ngModel required>
+      </div>
+      <small class="text-danger" [class.d-none]="salary.valid || salary.untouched">Salary is Requered and must be greater than 100</small>
+      </div>
+      <hr>
+      <div class="border text-center">
+        <button [disabled]="f.form.invalid" data-dismiss="modal" class="btn btn-success "><i class="fa fa-plus"></i>Save</button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Cancel</button>
+ 
+        </div>
+</form>
+</div>
+</ng-template>
+
+<!--modal for view -->
+
+<ng-template #contentDetails let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title2">Employee Detailes</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label>Id</label>
+        <div class="input-group">
+          <input id="id1"  class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>UserId</label>
+        <div class="input-group">
+          <input id="userId1"  class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Shop Works On</label>
+        <div class="input-group">
+          <input id="shop1"  class="form-control" readonly>
+        </div>
+        
+
+      </div>
+      <div class="form-group">
+        <label>Salary</label>
+        <div class="input-group">
+          <input id="salary1"  class="form-control" readonly >
+        </div>
+      </div>
+      <div class="border text-center">
+        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
+ 
+      </div>
+</form>
+</div>
+</ng-template>
+
+
+
+<!-- modal for update-->
+
+
+<ng-template #contentEdit let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title3">Edit Employee info</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form  [formGroup]="editForm" >
+      <div class="form-group">
+        <label >Id</label>
+        <div class="input-group">
+          <input  formControlName="id" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label >UserId</label>
+        <div class="input-group">
+          <input  formControlName="userId" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label >Shop Works On</label>
+        <div class="input-group">
+          <!--<input   formControlName="shop" class="form-control">-->
+          <select class="form-control" formControlName="shop" >
+            <option [defaultSelected] value="">Pleas select shop works on</option>
+            <option *ngFor="let s of shops">{{s.name}}</option>
+          </select> 
+        </div>
+        
+
+      </div>
+      <div class="form-group">
+        <label>Salary</label>
+        <div class="input-group">
+          <input min="100"  formControlName="salary" type="number" class="form-control">
+        </div>
+      </div>
+      <div class="border text-center">
+        <button [disabled]="editForm.invalid" data-dismiss="modal" class="btn btn-success" (click)="onSave()"><i class="fa fa-edit"></i>Update</button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Cancel</button>
+ 
+        </div>
+   
+ 
+   
+</form>
+</div>
+</ng-template>
+
+
+
+<!-- for delete modal-->
+
+<ng-template #contentDelete let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title4">Confirm Delete</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h2>Are you sure you want to delete this record.</h2>
+    <div class="border text-center"> 
+      <button data-dismiss="modal" class="btn btn-danger" (click)="onDelete()"> <i class="fa fa-remove"></i> Yes, Delete!</button> 
+      <button type="button" class="btn btn-success" (click)="modal.close('Save click')"> <i class="fa fa-muliply">&times</i>Cancel</button>
+  
+    </div>
+  </div>
+  
+</ng-template>
